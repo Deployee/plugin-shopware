@@ -6,6 +6,11 @@ namespace Deployee\Plugins\ShopwareTasks\Shop;
 class ShopConfig
 {
     /**
+     * @var string
+     */
+    private $configFilePath;
+
+    /**
      * @var array
      */
     private $config;
@@ -16,11 +21,7 @@ class ShopConfig
      */
     public function __construct(string $configFilePath)
     {
-        if(!is_file($configFilePath)){
-            throw new \InvalidArgumentException("Path to shopware config was not found or is invalid");
-        }
-
-        $this->config = require $configFilePath;
+        $this->configFilePath = $configFilePath;
     }
 
     /**
@@ -29,6 +30,22 @@ class ShopConfig
      */
     public function get(string $id)
     {
-        return $this->config[$id] ?? null;
+        return $this->getConfig()[$id] ?? null;
+    }
+
+    /**
+     * @return array
+     */
+    private function getConfig(): array
+    {
+        if($this->config === null){
+            if(!is_file($this->configFilePath)){
+                throw new \InvalidArgumentException("Path to shopware config was not found or is invalid");
+            }
+
+            $this->config = require($this->configFilePath);
+        }
+
+        return $this->config;
     }
 }
