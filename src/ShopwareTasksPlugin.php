@@ -41,17 +41,19 @@ class ShopwareTasksPlugin implements PluginInterface
 {
     public function boot(ContainerInterface $container)
     {
+
+        /* @var EnvironmentInterface $env */
+        $env = $container->get(EnvironmentInterface::class);
+        /* @var ConfigInterface $config  */
+        $config = $container->get(ConfigInterface::class);
+        $path = $config->get('shopware.path', '');
+        $path = strpos($path, '/') !== 0 && strpos($path, ':') !== 1
+            ? $env->getWorkDir() . DIRECTORY_SEPARATOR . $path
+            : $path;
+        $container->set('shopware.path', $path);
+
         $container->set(ShopConfig::class, function(ContainerInterface $container){
-            /* @var EnvironmentInterface $env */
-            $env = $container->get(EnvironmentInterface::class);
-            /* @var ConfigInterface $config  */
-            $config = $container->get(ConfigInterface::class);
-
-            $path = $config->get('shopware.path', '') . DIRECTORY_SEPARATOR . 'config.php';
-            $path = strpos($path, '/') !== 0 && strpos($path, ':') !== 1
-                ? $env->getWorkDir() . DIRECTORY_SEPARATOR . $path
-                : $path;
-
+            $path = $container->get('shopware.path') . DIRECTORY_SEPARATOR . 'config.php';
             return new ShopConfig($path);
         });
 
@@ -93,7 +95,7 @@ class ShopwareTasksPlugin implements PluginInterface
 
         /* @var ExecutableFinder $execFinder */
         $execFinder = $container->get(ExecutableFinder::class);
-        $execFinder->addAlias('swconsole', $config->get('shopware.path') . '/bin/console');
+        $execFinder->addAlias('swconsole', $container->get('shopware.path') . '/bin/console');
 
         /* @var TaskCreationHelper $helper */
         $helper = $container->get(TaskCreationHelper::class);
