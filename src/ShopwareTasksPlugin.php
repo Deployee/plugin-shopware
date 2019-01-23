@@ -65,16 +65,23 @@ class ShopwareTasksPlugin implements PluginInterface
             $shopConfig = $container->get(ShopConfig::class);
             $db = $shopConfig->get('db');
 
+            $config->set('db.type', 'mysql');
+            $config->set('db.host', $config->get('db.host') ?? $db['host']);
+            $config->set('db.port', $config->get('db.port') ?? $db['port']);
+            $config->set('db.database', $config->get('db.database') ?? $db['dbname']);
+            $config->set('db.user', $config->get('db.user') ?? $db['username']);
+            $config->set('db.password', $config->get('db.password') ?? $db['password']);
+
             $lazyPDO->changeConnection(
                 sprintf(
                     '%s:host=%s;port=%d;dbname=%s',
                     'mysql',
-                    $config->get('db.host') ?? $db['host'],
-                    $config->get('db.port') ?? $db['port'],
-                    $config->get('db.database') ?? $db['dbname']
+                    $config->get('db.host'),
+                    $config->get('db.port'),
+                    $config->get('db.database')
                 ),
-                $config->get('db.user') ?? $db['username'],
-                $config->get('db.password') ?? $db['password'],
+                $config->get('db.user'),
+                $config->get('db.password'),
                 [
                     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
                 ]
