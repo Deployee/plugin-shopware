@@ -7,6 +7,7 @@ namespace Deployee\Plugins\ShopwareTasks;
 use Deployee\Components\Config\ConfigInterface;
 use Deployee\Components\Container\ContainerInterface;
 use Deployee\Components\Dependency\ContainerResolver;
+use Deployee\Components\Environment\EnvironmentInterface;
 use Deployee\Components\Persistence\LazyPDO;
 use Deployee\Components\Plugins\PluginInterface;
 use Deployee\Plugins\Deploy\Dispatcher\DispatcherCollection;
@@ -41,9 +42,15 @@ class ShopwareTasksPlugin implements PluginInterface
     public function boot(ContainerInterface $container)
     {
         $container->set(ShopConfig::class, function(ContainerInterface $container){
+            /* @var EnvironmentInterface $env */
+            $env = $container->get(EnvironmentInterface::class);
             /* @var ConfigInterface $config  */
             $config = $container->get(ConfigInterface::class);
+
             $path = $config->get('shopware.path', '') . DIRECTORY_SEPARATOR . 'config.php';
+            $path = strpos($path, '/') !== 0 && strpos($path, ':') !== 1
+                ? $env->getWorkDir() . DIRECTORY_SEPARATOR . $path
+                : $path;
 
             return new ShopConfig($path);
         });
