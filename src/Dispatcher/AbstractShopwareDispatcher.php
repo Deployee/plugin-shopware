@@ -12,6 +12,6 @@ abstract class AbstractShopwareDispatcher extends AbstractTaskDefinitionDispatch
     protected function getEnvironmentConsoleParameter(TaskDefinitionInterface $taskDefinition): string
     {
         $params = $taskDefinition->define();
-        return sprintf('--env=%s', $params->get('env') === null ? 'production' : $params->get('env'));
+        return sprintf('--env=%s', $params->get('env'));
     }
 }
