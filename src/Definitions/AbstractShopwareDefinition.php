@@ -10,7 +10,7 @@ abstract class AbstractShopwareDefinition implements TaskDefinitionInterface
     /**
      * @var string
      */
-    protected $env;
+    protected $env = 'production';
 
     /**
      * @param string $env
