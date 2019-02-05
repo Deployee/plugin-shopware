@@ -20,6 +20,7 @@ use Deployee\Plugins\ShopwareTasks\Definitions\GenerateThemeCacheDefinition;
 use Deployee\Plugins\ShopwareTasks\Definitions\PluginActivateDefinition;
 use Deployee\Plugins\ShopwareTasks\Definitions\PluginDeactivateDefinition;
 use Deployee\Plugins\ShopwareTasks\Definitions\PluginInstallDefinition;
+use Deployee\Plugins\ShopwareTasks\Definitions\PluginRefreshDefinition;
 use Deployee\Plugins\ShopwareTasks\Definitions\PluginReinstallDefinition;
 use Deployee\Plugins\ShopwareTasks\Definitions\PluginUninstallDefinition;
 use Deployee\Plugins\ShopwareTasks\Definitions\PluginUpdateDefinition;
@@ -31,6 +32,7 @@ use Deployee\Plugins\ShopwareTasks\Dispatcher\GenerateThemeCacheDispatcher;
 use Deployee\Plugins\ShopwareTasks\Dispatcher\PluginActivateDispatcher;
 use Deployee\Plugins\ShopwareTasks\Dispatcher\PluginDeactivateDispatcher;
 use Deployee\Plugins\ShopwareTasks\Dispatcher\PluginInstallDispatcher;
+use Deployee\Plugins\ShopwareTasks\Dispatcher\PluginRefreshDispatcher;
 use Deployee\Plugins\ShopwareTasks\Dispatcher\PluginReinstallDispatcher;
 use Deployee\Plugins\ShopwareTasks\Dispatcher\PluginUninstallDispatcher;
 use Deployee\Plugins\ShopwareTasks\Dispatcher\PluginUpdateDispatcher;
@@ -117,6 +119,7 @@ class ShopwareTasksPlugin implements PluginInterface
         $helper->addAlias('swPluginUpdate', PluginUpdateDefinition::class);
         $helper->addAlias('swPluginActivate', PluginActivateDefinition::class);
         $helper->addAlias('swPluginDeactivate', PluginDeactivateDefinition::class);
+        $helper->addAlias('swPluginRefresh', PluginRefreshDefinition::class);
 
         /* @var DispatcherCollection $dispatcherCollection */
         $dispatcherCollection = $container->get(DispatcherCollection::class);
@@ -135,6 +138,7 @@ class ShopwareTasksPlugin implements PluginInterface
             $resolver->createInstance(PluginUpdateDispatcher::class),
             $resolver->createInstance(PluginActivateDispatcher::class),
             $resolver->createInstance(PluginDeactivateDispatcher::class),
+            $resolver->createInstance(PluginRefreshDispatcher::class)
         ];
 
         $dispatcherCollection->addDispatcherArray($dispatcherArray);
