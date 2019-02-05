@@ -2,18 +2,16 @@
 
 namespace Deployee\Plugins\ShopwareTasks\Definitions;
 
-
 use Deployee\Plugins\Deploy\Definitions\Parameter\ParameterCollection;
 use Deployee\Plugins\Deploy\Definitions\Parameter\ParameterCollectionInterface;
-use Deployee\Plugins\Deploy\Definitions\Tasks\TaskDefinitionInterface;
 
-class CacheClearDefinition implements TaskDefinitionInterface
+class CacheClearDefinition extends AbstractShopwareDefinition
 {
     /**
      * @return ParameterCollectionInterface
      */
     public function define(): ParameterCollectionInterface
     {
-        return new ParameterCollection();
+        return new ParameterCollection(get_object_vars($this));
     }
 }

@@ -3,12 +3,11 @@
 namespace Deployee\Plugins\ShopwareTasks\Dispatcher;
 
 use Deployee\Plugins\Deploy\Definitions\Tasks\TaskDefinitionInterface;
-use Deployee\Plugins\Deploy\Dispatcher\AbstractTaskDefinitionDispatcher;
 use Deployee\Plugins\Deploy\Dispatcher\DispatchResultInterface;
 use Deployee\Plugins\ShopwareTasks\Definitions\CacheClearDefinition;
 use Deployee\Plugins\ShopwareTasks\Definitions\ShopwareCommandDefinition;
 
-class CacheClearDispatcher extends AbstractTaskDefinitionDispatcher
+class CacheClearDispatcher extends AbstractShopwareDispatcher
 {
     /**
      * @param TaskDefinitionInterface $taskDefinition
@@ -26,6 +25,10 @@ class CacheClearDispatcher extends AbstractTaskDefinitionDispatcher
      */
     public function dispatch(TaskDefinitionInterface $taskDefinition): DispatchResultInterface
     {
-        return $this->delegate(new ShopwareCommandDefinition('sw:cache:clear', '-n'));
+        $params = $taskDefinition->define();
+        return $this->delegate(new ShopwareCommandDefinition(
+            'sw:cache:clear',
+            sprintf('-n %s', $this->getEnvironmentConsoleParameter($taskDefinition))
+        ));
     }
 }
