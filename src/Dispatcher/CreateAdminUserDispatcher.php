@@ -29,14 +29,13 @@ class CreateAdminUserDispatcher extends AbstractTaskDefinitionDispatcher
         $parameter = $taskDefinition->define();
         return $this->delegate(
             new ShopwareCommandDefinition(
-                'sw:admin:create',
+                'user:create',
                 sprintf(
-                    "--username=%s --password=%s --email=%s --name=%s --locale=%s -n",
+                    "--admin --lastName=%s --password=%s --email=%s --firstName=%s",
                     escapeshellarg($parameter->get('username')),
                     escapeshellarg($parameter->get('password')),
                     escapeshellarg($parameter->get('email')),
-                    escapeshellarg($parameter->get('name')),
-                    escapeshellarg($parameter->get('locale'))
+                    escapeshellarg($parameter->get('name'))
                 )
             )
         );

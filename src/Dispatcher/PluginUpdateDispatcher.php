@@ -28,7 +28,7 @@ class PluginUpdateDispatcher extends AbstractTaskDefinitionDispatcher
     {
         $parameter = $taskDefinition->define();
         return $this->delegate(
-            new ShopwareCommandDefinition('sw:plugin:update', '-n ' . $parameter->get('plugin'))
+            new ShopwareCommandDefinition('plugin:update', '-n ' . $parameter->get('plugin'))
         );
     }
 

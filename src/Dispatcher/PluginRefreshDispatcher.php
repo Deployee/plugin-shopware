@@ -27,7 +27,7 @@ class PluginRefreshDispatcher extends AbstractShopwareDispatcher
     {
         $params = $taskDefinition->define();
         return $this->delegate(new ShopwareCommandDefinition(
-            'sw:plugin:refresh',
+            'plugin:refresh',
             sprintf('-n %s', $this->getEnvironmentConsoleParameter($taskDefinition))
         ));
     }

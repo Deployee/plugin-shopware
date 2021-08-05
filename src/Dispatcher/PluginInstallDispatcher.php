@@ -29,7 +29,7 @@ class PluginInstallDispatcher extends AbstractTaskDefinitionDispatcher
         $parameter = $taskDefinition->define();
         return $this->delegate(
             new ShopwareCommandDefinition(
-                'sw:plugin:install',
+                'plugin:install',
                 sprintf(
                     '-n %s %s',
                     $parameter->get('activate') === true ? '--activate' : '',
