@@ -30,7 +30,7 @@ class PluginDeactivateDispatcher extends AbstractTaskDefinitionDispatcher
         $parameter = $taskDefinition->define();
 
         return $this->delegate(
-            new ShopwareCommandDefinition('sw:plugin:deactivate', '-n ' . $parameter->get('plugin'))
+            new ShopwareCommandDefinition('plugin:deactivate', '-n ' . $parameter->get('plugin'))
         );
     }
 }

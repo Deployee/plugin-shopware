@@ -35,7 +35,7 @@ class GenerateThemeCacheDispatcher extends AbstractTaskDefinitionDispatcher
         }
 
         return $this->delegate(
-            new ShopwareCommandDefinition('sw:theme:cache:generate', '-n ' . $arguments)
+            new ShopwareCommandDefinition('theme:compile', '-n ' . $arguments)
         );
     }
 }
