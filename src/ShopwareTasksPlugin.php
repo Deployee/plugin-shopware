@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Deployee\Plugins\ShopwareTasks;
-
 
 use Deployee\Components\Config\ConfigInterface;
 use Deployee\Components\Container\ContainerInterface;
@@ -43,9 +41,11 @@ use Deployee\Plugins\ShopwareTasks\Shop\ShopConfig;
 
 class ShopwareTasksPlugin implements PluginInterface
 {
+    /**
+     * @param ContainerInterface $container
+     */
     public function boot(ContainerInterface $container)
     {
-
         /* @var EnvironmentInterface $env */
         $env = $container->get(EnvironmentInterface::class);
         /* @var ConfigInterface $config  */
@@ -56,25 +56,29 @@ class ShopwareTasksPlugin implements PluginInterface
             : $path;
         $container->set('shopware.path', $path);
 
-        $container->set(ShopConfig::class, function(ContainerInterface $container){
-            $path = $container->get('shopware.path') . DIRECTORY_SEPARATOR . 'config.php';
-            return new ShopConfig($path);
+        $container->set(ShopConfig::class, function (ContainerInterface $container) {
+            $envFile = getenv('APP_ENV')
+                ? ShopConfig::BASE_ENV_FILE . '.' . getenv('APP_ENV')
+                : ShopConfig::BASE_ENV_FILE;
+
+            return new ShopConfig(
+                $container->get('shopware.path') . DIRECTORY_SEPARATOR . $envFile
+            );
         });
 
-        $container->extend(LazyPDO::class, function(LazyPDO $lazyPDO) use($container){
+        $container->extend(LazyPDO::class, function (LazyPDO $lazyPDO) use ($container) {
             /* @var ConfigInterface $config */
             $config = $container->get(ConfigInterface::class);
 
             /* @var ShopConfig $shopConfig */
             $shopConfig = $container->get(ShopConfig::class);
-            $db = $shopConfig->get('db');
 
-            $config->set('db.type', 'mysql');
-            $config->set('db.host', $config->get('db.host') ?? $db['host']);
-            $config->set('db.port', $config->get('db.port') ?? $db['port']);
-            $config->set('db.database', $config->get('db.database') ?? $db['dbname']);
-            $config->set('db.user', $config->get('db.user') ?? $db['username']);
-            $config->set('db.password', $config->get('db.password') ?? $db['password']);
+            $config->set('db.type', 'mysql' ?? $shopConfig->get('type'));
+            $config->set('db.host', $config->get('db.host') ?? $shopConfig->get('host'));
+            $config->set('db.port', $config->get('db.port') ?? $shopConfig->get('port'));
+            $config->set('db.database', $config->get('db.database') ?? $shopConfig->get('dbname'));
+            $config->set('db.user', $config->get('db.user') ?? $shopConfig->get('username'));
+            $config->set('db.password', $config->get('db.password') ?? $shopConfig->get('password'));
 
             $lazyPDO->changeConnection(
                 sprintf(
@@ -101,7 +105,7 @@ class ShopwareTasksPlugin implements PluginInterface
      */
     public function configure(ContainerInterface $container)
     {
-        /* @var ConfigInterface $config  */
+        /* @var ConfigInterface $config */
         $config = $container->get(ConfigInterface::class);
 
         /* @var ExecutableFinder $execFinder */
