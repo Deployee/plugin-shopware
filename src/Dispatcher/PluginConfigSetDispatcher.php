@@ -27,10 +27,9 @@ class PluginConfigSetDispatcher extends AbstractShopwareDispatcher
     {
         $params = $taskDefinition->define();
         return $this->delegate(new ShopwareCommandDefinition(
-            'sw:plugin:config:set',
+            'system:config:set',
             sprintf(
-                '-n %s %s %s %s',
-                escapeshellarg($params->get('plugin')),
+                '-n %s %s %s',
                 escapeshellarg($params->get('key')),
                 escapeshellarg($params->get('value')),
                 $this->getEnvironmentConsoleParameter($taskDefinition)

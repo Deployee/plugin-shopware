@@ -25,13 +25,11 @@ class PluginConfigSetDefinition extends AbstractShopwareDefinition
     protected $value;
 
     /**
-     * @param string $plugin
      * @param string $key
      * @param mixed $value
      */
-    public function __construct(string $plugin, string $key, $value)
+    public function __construct(string $key, $value)
     {
-        $this->plugin = $plugin;
         $this->key = $key;
         $this->value = $value;
     }

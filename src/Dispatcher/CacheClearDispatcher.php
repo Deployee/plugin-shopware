@@ -27,7 +27,7 @@ class CacheClearDispatcher extends AbstractShopwareDispatcher
     {
         $params = $taskDefinition->define();
         return $this->delegate(new ShopwareCommandDefinition(
-            'sw:cache:clear',
+            'cache:clear',
             sprintf('-n %s', $this->getEnvironmentConsoleParameter($taskDefinition))
         ));
     }

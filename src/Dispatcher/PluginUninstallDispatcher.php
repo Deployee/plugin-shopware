@@ -29,7 +29,7 @@ class PluginUninstallDispatcher extends AbstractTaskDefinitionDispatcher
         $parameter = $taskDefinition->define();
         return $this->delegate(
             new ShopwareCommandDefinition(
-                'sw:plugin:uninstall',
+                'plugin:uninstall',
                 sprintf(
                     '-n %s %s',
                     $parameter->get('secure') === true ? '--secure' : '',
